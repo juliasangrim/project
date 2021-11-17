@@ -2,6 +2,10 @@
 #define LAYOUT_DOMINO_FIELD_H
 
 
+#include <iostream>
+
+
+
 class Field {
 private:
     int** field;
@@ -26,9 +30,12 @@ public:
         for (int i = 0; i < height; ++i) {
            delete[] field[i];
         }
+        delete[] field;
     }
 
     int** get_field();
+    long get_width() const;
+    long get_height() const;
 };
 
 

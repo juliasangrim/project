@@ -1,0 +1,10 @@
+#ifndef LAYOUT_DOMINO_TEMPLATE_H
+#define LAYOUT_DOMINO_TEMPLATE_H
+
+
+class Template {
+
+};
+
+
+#endif //LAYOUT_DOMINO_TEMPLATE_H
