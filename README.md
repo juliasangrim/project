@@ -1,1 +1,1 @@
-# practise
+# diploma
