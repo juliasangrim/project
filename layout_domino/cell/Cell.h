@@ -1,9 +1,13 @@
 #ifndef LAYOUT_DOMINO_CELL_H
 #define LAYOUT_DOMINO_CELL_H
 
-typedef struct Cell {
+class Cell {
+    //redo to private
+public:
     int status;
     int hits;
-} Cell;
+
+    //get_new_state();
+}
 
 #endif //LAYOUT_DOMINO_CELL_H
