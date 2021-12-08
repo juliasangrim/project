@@ -4,17 +4,21 @@
 
 #include <string>
 #include <utility>
-#include "../field/Field.h"
+#include "Field.h"
+#include "Template.h"
 
 class Runner {
 private:
+    Template* templates;
     std::string file_name;
+    void init_templates();
 
-    void write_in_file(Field& field);
+    void write_in_file(const Field& field);
 public:
-    Runner(std::string file) {
-        file_name = std::move(file);
-    }
+    const int AMOUNT_TEMPLATE = 12;
+
+    explicit Runner(std::string &file);
+    ~Runner();
     void run(long height, long width);
 };
 
