@@ -9,17 +9,30 @@
 
 class Runner {
 private:
-    Template* templates;
-    std::string file_name;
-    void init_templates();
+    const int WINDOW_SIZE = 5;
+    const int ITER_COUNT = 10;
 
-    void write_in_file(const Field& field);
+    //TODO
+    Template *templates;
+    Field* field;
+    Cell *window;
+
+    std::string file_name;
+
+    void init_templates();
+    void evolve();
+    void fill_window(Coord center);
+    void write_in_file();
+    void count_hits();
+    bool compare_with_template();
+
+
 public:
     const int AMOUNT_TEMPLATE = 12;
 
-    explicit Runner(std::string &file);
+    explicit Runner(std::string &file, int height, int width);
     ~Runner();
-    void run(long height, long width);
+    void run();
 };
 
 

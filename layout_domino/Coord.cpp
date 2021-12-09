@@ -25,7 +25,7 @@ Coord::Coord() {
 }
 
 std::ostream &operator<<(std::ostream &out, const Coord &point) {
-    out << "( " << point.x << ";" << point.y << ")" ;
+    out << "(" << point.x << ";" << point.y << ")" ;
     return out;
 }
 

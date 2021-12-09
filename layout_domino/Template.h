@@ -16,10 +16,12 @@ private:
     Coord center;
 
     void fill_template();
+
 public:
 
     Template();
     ~Template();
+
     void init_template(Coord &center_template);
 
     Cell *get_template();
