@@ -16,21 +16,23 @@ private:
     Template *templates;
     Field* field;
     Cell *window;
-
+    //TODO array?
+    double probability;
     std::string file_name;
 
     void init_templates();
     void evolve();
     void fill_window(Coord center);
     void write_in_file();
-    void count_hits();
-    bool compare_with_template();
+    int count_hits(Coord &point);
+    bool compare_with_template(int begin_x, int begin_y, int index_template, Tiletype tiletype);
 
+    void change_state(Coord &point);
 
 public:
     const int AMOUNT_TEMPLATE = 12;
 
-    explicit Runner(std::string &file, int height, int width);
+    explicit Runner(std::string &file, int height, int width, double prob);
     ~Runner();
     void run();
 };

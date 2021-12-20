@@ -1,13 +1,13 @@
 #include "Cell.h"
 
 Cell::Cell() {
-    this -> status = -1;
+    this -> state = -1;
     this -> hits = -1;
     this -> coord.set_coord(0,0);
 }
 
 int Cell::get_state() {
-    return status;
+    return state;
 }
 
 Coord Cell::get_coord() {
@@ -19,7 +19,7 @@ int Cell::get_hits() {
 }
 
 void Cell::set_state(int new_state) {
-    this -> status = new_state;
+    this -> state = new_state;
 }
 
 void Cell::set_hits(int new_hitsvalue) {

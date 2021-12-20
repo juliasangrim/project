@@ -6,7 +6,7 @@
 
 class Cell {
 private:
-        int status;
+        int state;
         int hits;
         Coord coord;
 

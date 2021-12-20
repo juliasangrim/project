@@ -30,7 +30,7 @@ void Template::fill_template() {
                 if (center.get_x() == WIDTH - 1 && x == 0) {
                     single_template[y * WIDTH + x].set_state(-1);
                 } else {
-                    //TODO
+                    //fill kernel domino
                     if (y == 1 && (x == 1 || x == 2)) {
                     //
                         single_template[y * WIDTH + x].set_state(1);
@@ -58,6 +58,10 @@ std::ostream &operator<<(std::ostream &out, const Template &_template) {
     }
     out << "CENTER: " << _template.center;
     return out;
+}
+
+int Template::get_center_state() {
+    return single_template[center.get_y() * WIDTH + center.get_x()].get_state();
 }
 
 

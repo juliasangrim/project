@@ -4,9 +4,10 @@
 
 #include <ostream>
 #include "Cell.h"
-#include "Location.h"
+#include "Tiletype.h"
 const int WIDTH = 4;
 const int HEIGHT = 3;
+
 
 class Template {
 
@@ -24,6 +25,8 @@ public:
 
     void init_template(Coord &center_template);
 
+
+    int get_center_state();
     Cell *get_template();
     Coord get_center();
 

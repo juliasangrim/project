@@ -12,11 +12,11 @@ private:
     int height;
     int width;
 
-    int height_nobound;
-    int width_nobound;
 //TODO
     const int width_bound = 2;
     const int height_bound = 2;
+    int height_nobound;
+    int width_nobound;
 
     void init_field();
 
@@ -35,8 +35,8 @@ public:
     Cell get_cell_by_index(int index);
     Cell get_cell_by_coord(Coord coord);
     Cell get_cell_by_xy(int x, int y);
-    void change_cell_by_coord(Coord coord, int hits, int status);
-
+    void change_cell_status_by_coord(Coord coord, int status);
+    void change_cell_hits_by_coord(Coord coord, int hits);
     //smth do
 
     friend std::ostream& operator<< (std::ostream &out, const Field & _field);

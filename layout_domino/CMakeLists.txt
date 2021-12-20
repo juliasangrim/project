@@ -3,4 +3,4 @@ project(layout_domino)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(layout_domino main.cpp field/Field.cpp field/Field.h runner/Runner.cpp runner/Runner.h cell/Cell.h template/Template.cpp template/Template.h)
+add_executable(layout_domino main.cpp Field.cpp Field.h Runner.cpp Runner.h Template.cpp Template.h Coord.cpp Coord.h Cell.cpp Cell.h Tiletype.h)
