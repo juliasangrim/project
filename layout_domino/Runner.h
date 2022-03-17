@@ -10,7 +10,7 @@
 class Runner {
 private:
     const int WINDOW_SIZE = 5;
-    const int ITER_COUNT = 10;
+    const int ITER_COUNT = 482;
 
     //TODO
     Template *templates;
@@ -18,6 +18,7 @@ private:
     Cell *window;
     //TODO array?
     double probability;
+    double probability_max;
     std::string file_name;
 
     void init_templates();
@@ -32,7 +33,7 @@ private:
 public:
     const int AMOUNT_TEMPLATE = 12;
 
-    explicit Runner(std::string &file, int height, int width, double prob);
+    explicit Runner(std::string &file, int height, int width, double prob_1, double prob_2);
     ~Runner();
     void run();
 };

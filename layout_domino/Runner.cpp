@@ -3,12 +3,13 @@
 #include <ctime>
 #include "Runner.h"
 
-Runner:: Runner(std::string &file, int height, int width, double prob) {
+Runner:: Runner(std::string &file, int height, int width, double prob_0, double  prob_1) {
     this -> file_name = file;
     this -> templates = new Template[AMOUNT_TEMPLATE];
     this -> field = new Field(height, width);
     this -> window = new Cell[WINDOW_SIZE * WINDOW_SIZE];
-    this->probability = prob;
+    this->probability = prob_0;
+    this->probability_max = prob_1;
     init_templates();
 }
 
@@ -46,7 +47,7 @@ void Runner::evolve() {
     std::uniform_int_distribution<int> dist2(0, field->get_height() - 2 * field->get_height_bound() - 1);
     int all_point_number = (field->get_width() - 2 * field->get_width_bound())
             * (field->get_height() - 2 * field->get_height_bound());
-    for (int i = 0; i < 50; ++i) {
+    for (int i = 0; i < ITER_COUNT; ++i) {
         for (int j = 0; j < all_point_number; ++j) {
             //TODO: change rand
 //            std::cout << "ALL POINT NUMBER " << all_point_number << std::endl;
@@ -139,26 +140,31 @@ void Runner::change_state(Coord &point) {
     std::mt19937 mt(start);
     std::uniform_real_distribution<double> dist(0, 1);
     std::uniform_int_distribution<int> dist1(0, 1);
+    int new_state = field->get_cell_by_coord(point).get_state();
     auto amountHits = field->get_cell_by_coord(point).get_hits();
    // std::cout << "Amount hits " << amountHits << " " << std::endl;
     if (amountHits > 0 && amountHits != 100) {
-        field->change_cell_status_by_coord(point, 0);
-    } else {
-        if (amountHits == 100) {
-            field->change_cell_status_by_coord(point, 1);
-        } else {
-            if (amountHits == 0) {
-                //TODO change rand
-                double prob = dist(mt);
-               // std::cout << "PROB RAND + PROB" << " " << prob << " " << probability << std::endl;
+       new_state = 0;
+    }
+    if (amountHits == 100) {
+        new_state = 1;
+    }
+    if (amountHits == 0) {
+        double prob = dist(mt);
+        // std::cout << "PROB RAND + PROB" << " " << prob << " " << probability << std::endl;
+        if (prob < probability) {
+            new_state = dist1(mt);
+        }
 
-                if (prob < probability) {
-                    int new_state = dist1(mt);
-                    field->change_cell_status_by_coord(point, new_state);
-                }
-            }
+    }
+
+    if (amountHits == 1) {
+        double prob = dist(mt);
+        if (prob < probability_max) {
+            new_state = dist1(mt);
         }
     }
+    field->change_cell_status_by_coord(point, new_state);
 }
 
 bool Runner::compare_with_template(int begin_x, int begin_y, int index_template, Tiletype tiletype) {
