@@ -20,8 +20,6 @@ public:
         void set_state(int new_state);
         void set_hits(int new_hitsvalue);
         void set_coord(Coord &new_coord);
-
-
 };
 
 

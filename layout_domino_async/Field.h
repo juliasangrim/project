@@ -15,12 +15,11 @@ private:
 //TODO
     const int width_bound = 2;
     const int height_bound = 2;
-    int height_nobound;
-    int width_nobound;
 
-    void init_field();
+
 
 public:
+    void init_field();
     Field(int rows, int columns);
 
     ~Field();

@@ -5,11 +5,11 @@ Coord::Coord(int x_coord, int y_coord) {
     this -> y = y_coord;
 }
 
-int Coord::get_x() {
+int Coord::get_x() const {
     return x;
 }
 
-int Coord::get_y() {
+int Coord::get_y() const {
     return y;
 }
 
@@ -25,7 +25,7 @@ Coord::Coord() {
 }
 
 std::ostream &operator<<(std::ostream &out, const Coord &point) {
-    out << "(" << point.x << ";" << point.y << ")" ;
+    out << "coords(" << point.x << ";" << point.y << ")" ;
     return out;
 }
 

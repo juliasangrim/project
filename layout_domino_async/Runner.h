@@ -3,19 +3,27 @@
 
 
 #include <string>
+#include <random>
 #include <utility>
+#include <fstream>
+#include <random>
 #include "Field.h"
 #include "Template.h"
+#include "MyLoggerFile.h"
+#include "FileWriter.h"
 
 class Runner {
 private:
-    const int WINDOW_SIZE = 5;
-    const int ITER_COUNT = 482;
+    FileWriter domino_info = FileWriter("../domino_info.csv");
 
-    //TODO
+    const int WINDOW_SIZE = 5;
+    int iter_count;
+
     Template *templates;
     Field* field;
     Cell *window;
+
+    std::mt19937_64 mt;
     //TODO array?
     double probability;
     double probability_max;
@@ -24,16 +32,16 @@ private:
     void init_templates();
     void evolve();
     void fill_window(Coord center);
-    void write_in_file();
     int count_hits(Coord &point);
     bool compare_with_template(int begin_x, int begin_y, int index_template, Tiletype tiletype);
+    int checkValidDomino();
 
     void change_state(Coord &point);
 
 public:
     const int AMOUNT_TEMPLATE = 12;
 
-    explicit Runner(std::string &file, int height, int width, double prob_1, double prob_2);
+    explicit Runner(std::string &file, int height, int width, double prob_0, double prob_1, int iter_count);
     ~Runner();
     void run();
 };

@@ -15,12 +15,11 @@ private:
 //TODO
     const int width_bound = 2;
     const int height_bound = 2;
-    int height_nobound;
-    int width_nobound;
 
-    void init_field();
+
 
 public:
+    void init_field();
     Field(int rows, int columns);
 
     ~Field();
@@ -28,8 +27,8 @@ public:
     Cell *get_field();
 
     //TODO
-    [[nodiscard]] int get_width_bound() const;
-    [[nodiscard]] int get_height_bound() const;
+    int get_width_bound() const;
+    int get_height_bound() const;
     int get_width();
     int get_height();
     Cell get_cell_by_index(int index);
@@ -41,7 +40,7 @@ public:
 
     friend std::ostream& operator<< (std::ostream &out, const Field & _field);
 
-    void copy_filed(Cell* newField);
+    void copy_filed(Cell *new_field);
 };
 
 

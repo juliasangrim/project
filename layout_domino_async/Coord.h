@@ -10,8 +10,8 @@ private:
     int x;
     int y;
 public :
-    int get_x();
-    int get_y();
+    int get_x() const;
+    int get_y() const;
     void set_coord(int x_coord, int y_coord);
 
     Coord();
