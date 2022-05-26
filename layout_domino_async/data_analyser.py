@@ -5,10 +5,11 @@ print("Test ", n , "x" , n)
 
 df=pd.read_csv('domino_info.csv', sep=';',header=None)
 
+print(df[1])
 count = 0
 sum = 0
 for i in range(len(df[0])) :
-    if (df[1][i] == 20) :
+    if (df[1][i] == 4) :
         print(i)
         count += 1
         sum += df[0][i]
@@ -23,7 +24,7 @@ print("Maximum domino: ", maxim)
 #     count = 0
 #     if data[1] == 4 :
 #         count += 1;
-print(count / 1000 * 100)
+print(count / 100 * 100)
 
 # print ("Minimum domino: ", min(df[0]))
 # print(max(df[0]))

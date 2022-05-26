@@ -8,7 +8,7 @@ df=pd.read_csv('domino_info.csv', sep=';',header=None)
 count = 0
 sum = 0
 for i in range(len(df[0])) :
-    if (df[1][i] == 16) :
+    if (df[1][i] ==  4 ) :
         print(i)
         count += 1
         sum += df[0][i]

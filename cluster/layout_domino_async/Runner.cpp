@@ -1,110 +1,100 @@
 #include <sstream>
 #include "Runner.h"
+#include "FileWriter.h"
 
 
 
 Runner::Runner(std::string &file, int height, int width, double prob_0, double prob_1, int iter_count) {
-    std::random_device rd;
-    mt.seed(rd());
     this->file_name = file;
     this->templates = new Template[AMOUNT_TEMPLATE];
-    this->old_field = new Field(height, width);
-    this->old_field->init_field(mt);
-    this->new_field = new Field(height, width);
-    this->new_field->copy_filed(this->old_field->get_field());
+    this->field = new Field(height, width);
+    this->field->init_field();
     this->window = new Cell[WINDOW_SIZE * WINDOW_SIZE];
     this->iter_count = iter_count;
     this->probability = prob_0;
     this->probability_max = prob_1;
+    std::random_device rd;
+    mt.seed(rd());
 
     init_templates();
 }
 
 void Runner::init_templates() {
-//    LoggingLib::FileLogger template_logger("log_file_temp late.txt");
-//    template_logger << "INIT TEMPLATES: \n";
+    LoggingLib::FileLogger template_logger("log_file_template.txt");
+    template_logger << "INIT TEMPLATES: \n";
     for (int y = 0; y < HEIGHT; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
             Coord center(x, y);
             templates[y * WIDTH + x].init_template(center);
-//            template_logger << templates[y * WIDTH + x];
+            template_logger << templates[y * WIDTH + x];
         }
     }
 }
 
 
 void Runner::fill_window(Coord center) {
-    Coord begin_coord(center.get_x() - old_field->get_width_bound(), center.get_y() - old_field->get_width_bound());
+    Coord begin_coord(center.get_x() - field->get_width_bound(), center.get_y() - field->get_width_bound());
     for (int y = 0; y < WINDOW_SIZE; ++y) {
         for (int x = 0; x < WINDOW_SIZE; ++x) {
-            window[y * WINDOW_SIZE + x] = old_field->get_cell_by_xy(begin_coord.get_x() + x, begin_coord.get_y() + y);
+            window[y * WINDOW_SIZE + x] = field->get_cell_by_xy(begin_coord.get_x() + x, begin_coord.get_y() + y);
         }
     }
 }
 
 
 void Runner::evolve() {
-  //  LoggingLib::FileLogger field_logger("log_file.txt");
-    int all_point_number = old_field->get_size_available_field();
+    LoggingLib::FileLogger field_logger("log_file.txt");
+    int all_point_number = field->get_size_available_field();
     std::uniform_int_distribution<int> dist1(0, all_point_number - 1);
     //get number of points
-
     int max_count = 0;
     int iter_num = 0;
     for (int i = 0; i < iter_count; ++i) {
        // field_logger << "----NUMBER OF ITERATION: " << i << "\n";
         for (int j = 0; j < all_point_number; ++j) {
-//            field_logger << "STATE OF FIELD BEFORE COUNT HITS: \n" << *old_field;
-//            field_logger << "STATE OF FIELD BEFORE COUNT HITS NEW: \n" << *new_field;
+         //   field_logger << "STATE OF FIELD BEFORE COUNT HITS: \n" << *field;
             int rand_index = dist1(mt);
             //std::cout << rand_index << std::endl;
             //Todo: make coordinate shift inside field
-            Coord center = old_field->get_available_field()[rand_index].get_coord();
-            center.set_coord(center.get_x() + old_field->get_width_bound(), center.get_y() + old_field->get_height_bound());
-
+            Coord center = field->get_available_field()[rand_index].get_coord();
+            center.set_coord(center.get_x() + field->get_width_bound(), center.get_y() + field->get_height_bound());
+          //  std::cout << center << std::endl;
             fill_window(center);
 
-            auto hits = count_hits(center);
-            new_field->change_cell_hits_by_coord(center, hits);
-//            field_logger << "STATE OF FIELD AFTER COUNT HITS: \n" << *old_field;
-//            field_logger << "STATE OF FIELD AFTER COUNT HITS NEW: \n" << *new_field;
-
+            auto hits = count_hits();
+            field->change_cell_hits_by_coord(center, hits);
             change_state(center);
-//            field_logger << "STATE OF FIELD AFTER CHANGE STATE: \n" << *old_field;
-//            field_logger << "STATE OF FIELD AFTER CHANGE STATE NEW: \n" << *new_field;
+
             int count = checkValidDomino();
             if (count > max_count) {
                 max_count = count;
                 iter_num = i;
             }
         }
-       old_field->copy_filed(new_field->get_field());
 
     }
 
-    this->old_field->init_field(mt);
-    new_field->copy_filed(old_field->get_field());
-    std::cout << iter_num  <<  "; " <<  max_count << std::endl;
+    this->field->init_field();
+    domino_info.write_file(iter_num, ";", max_count);
 }
 
 void Runner::run() {
-   // std::cout << *old_field << std::endl;
+   // std::cout << *field << std::endl;
     std::uniform_real_distribution<double> rand_prob(0, 1);
     evolve();
    // std::cout << checkValidDomino() << std::endl;
-//    FileWriter fileWriter = FileWriter(file_name);
-//    fileWriter.write_file(*new_field);
+    FileWriter fileWriter = FileWriter(file_name);
+    fileWriter.write_file(*field);
 
 }
 
 Runner::~Runner() {
-    delete old_field;
-    delete new_field;
+    delete field;
     delete[] templates;
     delete[] window;
 }
 
-int Runner::count_hits(Coord &point) {
+int Runner::count_hits() {
     //for horizontal
     int count_hits = 0;
     for (int i = 0; i < AMOUNT_TEMPLATE; ++i) {
@@ -140,12 +130,12 @@ int Runner::count_hits(Coord &point) {
 // create method
 int Runner::checkValidDomino() {
     int count = 0;
-    for (int i = 1; i < new_field->get_height() - 3; ++i) {
-        for (int  j = 1; j < new_field->get_width() - 3; ++j) {
+    for (int i = 1; i < field->get_height() - 3; ++i) {
+        for (int  j = 1; j < field->get_width() - 3; ++j) {
             bool isValidDomino = true;
             for (int y = 0; y < HEIGHT; ++y) {
                 for (int x = 0; x < WIDTH; ++x) {
-                    int field_cell_status = new_field->get_cell_by_coord(Coord (j + x, i + y)).get_state();
+                    int field_cell_status = field->get_cell_by_coord(Coord (j + x, i + y)).get_state();
                     isValidDomino = (templates[1].get_template()[y * WIDTH + x].get_state() == field_cell_status);
                     if (!isValidDomino) {
                         break;
@@ -162,13 +152,13 @@ int Runner::checkValidDomino() {
         }
     }
 
-    for (int i = 1; i < new_field->get_height() - 3; ++i) {
-        for (int j = 1; j < new_field->get_width() - 3; ++j) {
+    for (int i = 1; i < field->get_height() - 3; ++i) {
+        for (int j = 1; j < field->get_width() - 3; ++j) {
             bool isValidDomino = true;
             for (int x = 0; x < WIDTH; ++x) {
                 for (int y = 0; y < HEIGHT; ++y) {
 
-                    int field_cell_status = new_field->get_cell_by_coord(Coord (j + y, i + x)).get_state();
+                    int field_cell_status = field->get_cell_by_coord(Coord (j + y, i + x)).get_state();
                     isValidDomino = (templates[1].get_template()[y * WIDTH + x].get_state() == field_cell_status);
                     if (!isValidDomino) {
                         break;
@@ -190,9 +180,9 @@ int Runner::checkValidDomino() {
 void Runner::change_state(Coord &point) {
     std::uniform_real_distribution<double> rand_prob(0, 1);
     std::uniform_int_distribution<int> rand_status(0, 1);
-    int new_state = old_field->get_cell_by_coord(point).get_state();
+    int new_state = field->get_cell_by_coord(point).get_state();
 
-    auto amountHits = new_field->get_cell_by_coord(point).get_hits();
+    auto amountHits = field->get_cell_by_coord(point).get_hits();
     double prob = rand_prob(mt);
     if (amountHits == 0 && prob <= probability) {
         new_state = rand_status(mt);
@@ -202,7 +192,7 @@ void Runner::change_state(Coord &point) {
         new_state = rand_status(mt);
     }
 
-    new_field->change_cell_status_by_coord(point, new_state);
+    field->change_cell_status_by_coord(point, new_state);
 }
 
 bool Runner::compare_with_template(int begin_x, int begin_y, int index_template, Tiletype tiletype) {

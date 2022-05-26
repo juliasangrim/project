@@ -12,7 +12,7 @@ public:
         for (int i = 0; i <= size; i += 1) {
             std::string curr_arg = argv[i];
             if (curr_arg.find(option) == 0) {
-                std::size_t position = curr_arg.find_first_of("=");
+                std::size_t position = curr_arg.find_first_of('=');
                 cmd = curr_arg.substr(position + 1);
                 return cmd;
             }

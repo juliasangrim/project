@@ -1,7 +1,7 @@
 #include <iostream>
-
-#include "MyLoggerFile.h"
-#include "Field.h"
+//
+//#include "MyLoggerFile.h"
+//#include "Field.h"
 #include "Runner.h"
 #include "SimpleParser.h"
 

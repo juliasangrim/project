@@ -9,19 +9,18 @@
 #include <random>
 #include "Field.h"
 #include "Template.h"
-
+#include "MyLoggerFile.h"
+#include "FileWriter.h"
 
 class Runner {
 private:
-//    FileWriter domino_info = FileWriter("../domino_info.csv");
+    FileWriter domino_info = FileWriter("../domino_info.csv");
 
     const int WINDOW_SIZE = 5;
     int iter_count;
 
     Template *templates;
-    Field* old_field;
-    Field* new_field;
-
+    Field* field;
     Cell *window;
 
     std::mt19937 mt;
@@ -33,7 +32,7 @@ private:
     void init_templates();
     void evolve();
     void fill_window(Coord center);
-    int count_hits(Coord &point);
+    int count_hits();
     bool compare_with_template(int begin_x, int begin_y, int index_template, Tiletype tiletype);
     int checkValidDomino();
 

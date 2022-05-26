@@ -9,12 +9,12 @@
 #include <random>
 #include "Field.h"
 #include "Template.h"
-#include "MyLoggerFile.h"
-#include "FileWriter.h"
+//#include "MyLoggerFile.h"
+//#include "FileWriter.h"
 
 class Runner {
 private:
-    FileWriter domino_info = FileWriter("../domino_info.csv");
+  //  FileWriter domino_info = FileWriter("../domino_info.csv");
 
     const int WINDOW_SIZE = 5;
     int iter_count;
@@ -23,7 +23,7 @@ private:
     Field* field;
     Cell *window;
 
-    std::mt19937_64 mt;
+    std::mt19937 mt;
     //TODO array?
     double probability;
     double probability_max;
@@ -32,7 +32,7 @@ private:
     void init_templates();
     void evolve();
     void fill_window(Coord center);
-    int count_hits(Coord &point);
+    int count_hits();
     bool compare_with_template(int begin_x, int begin_y, int index_template, Tiletype tiletype);
     int checkValidDomino();
 

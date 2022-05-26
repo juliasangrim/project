@@ -1,6 +1,6 @@
 #include <sstream>
 #include "Runner.h"
-#include "FileWriter.h"
+//#include "FileWriter.h"
 
 
 
@@ -8,25 +8,25 @@ Runner::Runner(std::string &file, int height, int width, double prob_0, double p
     this->file_name = file;
     this->templates = new Template[AMOUNT_TEMPLATE];
     this->field = new Field(height, width);
-    this->field->init_field();
+    std::random_device rd;
+    mt.seed(rd());
+    this->field->init_field(mt);
     this->window = new Cell[WINDOW_SIZE * WINDOW_SIZE];
     this->iter_count = iter_count;
     this->probability = prob_0;
     this->probability_max = prob_1;
-    std::random_device rd;
-    mt.seed(rd());
 
     init_templates();
 }
 
 void Runner::init_templates() {
-    LoggingLib::FileLogger template_logger("log_file_template.txt");
-    template_logger << "INIT TEMPLATES: \n";
+//    LoggingLib::FileLogger template_logger("log_file_template.txt");
+//    template_logger << "INIT TEMPLATES: \n";
     for (int y = 0; y < HEIGHT; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
             Coord center(x, y);
             templates[y * WIDTH + x].init_template(center);
-            template_logger << templates[y * WIDTH + x];
+//            template_logger << templates[y * WIDTH + x];
         }
     }
 }
@@ -43,25 +43,25 @@ void Runner::fill_window(Coord center) {
 
 
 void Runner::evolve() {
-    LoggingLib::FileLogger field_logger("log_file.txt");
-    std::uniform_int_distribution<int> dist1(0, field->get_width() - 2 * field->get_width_bound() - 1);
-    std::uniform_int_distribution<int> dist2(0, field->get_height() - 2 * field->get_height_bound() - 1);
+   // LoggingLib::FileLogger field_logger("log_file.txt");
+    int all_point_number = field->get_size_available_field();
+    std::uniform_int_distribution<int> dist1(0, all_point_number - 1);
     //get number of points
-    int all_point_number = (field->get_width() - 2 * field->get_width_bound())
-                           * (field->get_height() - 2 * field->get_height_bound());
     int max_count = 0;
     int iter_num = 0;
     for (int i = 0; i < iter_count; ++i) {
        // field_logger << "----NUMBER OF ITERATION: " << i << "\n";
         for (int j = 0; j < all_point_number; ++j) {
          //   field_logger << "STATE OF FIELD BEFORE COUNT HITS: \n" << *field;
-            int randX = dist1(mt) + field->get_width_bound();
-            int randY = dist2(mt) + field->get_height_bound();
-            Coord center = Coord(randX, randY);
-
+            int rand_index = dist1(mt);
+            //std::cout << rand_index << std::endl;
+            //Todo: make coordinate shift inside field
+            Coord center = field->get_available_field()[rand_index].get_coord();
+            center.set_coord(center.get_x() + field->get_width_bound(), center.get_y() + field->get_height_bound());
+          //  std::cout << center << std::endl;
             fill_window(center);
 
-            auto hits = count_hits(center);
+            auto hits = count_hits();
             field->change_cell_hits_by_coord(center, hits);
             change_state(center);
 
@@ -74,8 +74,9 @@ void Runner::evolve() {
 
     }
 
-    this->field->init_field();
-    domino_info.write_file(iter_num, ";", max_count);
+    this->field->init_field(mt);
+    std::cout << iter_num << "; " << max_count << std::endl;
+   // domino_info.write_file(iter_num, ";", max_count);
 }
 
 void Runner::run() {
@@ -83,8 +84,8 @@ void Runner::run() {
     std::uniform_real_distribution<double> rand_prob(0, 1);
     evolve();
    // std::cout << checkValidDomino() << std::endl;
-    FileWriter fileWriter = FileWriter(file_name);
-    fileWriter.write_file(*field);
+//    FileWriter fileWriter = FileWriter(file_name);
+//    fileWriter.write_file(*field);
 
 }
 
@@ -94,7 +95,7 @@ Runner::~Runner() {
     delete[] window;
 }
 
-int Runner::count_hits(Coord &point) {
+int Runner::count_hits() {
     //for horizontal
     int count_hits = 0;
     for (int i = 0; i < AMOUNT_TEMPLATE; ++i) {

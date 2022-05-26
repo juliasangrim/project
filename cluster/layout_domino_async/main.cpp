@@ -1,6 +1,7 @@
 #include <iostream>
 
-
+#include "MyLoggerFile.h"
+#include "Field.h"
 #include "Runner.h"
 #include "SimpleParser.h"
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
         prob_first_rule = stod(SimpleParser::getCmdOption(argc,argv, "-p0="));
         prob_second_rule = stod(SimpleParser::getCmdOption(argc,argv, "-pmax="));
 
-        std::cout << field_width  << " "<< filePath << " " << field_height << " " << prob_first_rule << " "<< prob_second_rule;
+        std::cout << field_width << filePath << field_height << prob_first_rule << prob_second_rule;
     } catch (std::invalid_argument &e) {
         std::cerr << e.what();
         return EXIT_FAILURE;

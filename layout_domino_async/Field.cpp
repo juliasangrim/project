@@ -6,6 +6,21 @@
 
 Field::Field(int rows, int columns) {
     field = new Cell[(rows + 2 * height_bound) * (columns + 2 * width_bound)];
+    //Todo: is id dimond or not
+    //diamond
+//    if (width % 2 == 0) {
+//        size_available_field = ((rows + 1) * (columns + 1)) / 2;
+//        std::cout << size_available_field << std::endl;
+//    } else {
+//        size_available_field = std::ceil(rows * columns / 2);
+//        std::cout << size_available_field << std::endl;
+//    }
+
+//square
+    std::cout << std::endl;
+    size_available_field = rows * columns;
+
+    available_points = new Cell[size_available_field];
     width = columns + 2 * width_bound;
     height = rows + 2 * height_bound;
 
@@ -20,19 +35,50 @@ Cell *Field::get_field() {
     return field;
 }
 
-void Field::init_field() {
-    std::random_device rd;
-    std::mt19937 mt(rd());
+Cell *Field::get_available_field() {
+    return available_points;
+}
+
+int Field::get_size_available_field() {
+    return size_available_field;
+}
+
+void Field::init_field(std::mt19937 mt) {
     std::uniform_int_distribution<int> dist(0, 1);
+    int i = 0;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             //array creates with size + bounds
+            //Todo: is id dimond or not
+            //diamond
             if (x >= width_bound && x < width - width_bound && y >= height_bound && y < height - height_bound) {
+//                float center_x = (float) (width - 1) / 2;
+//                float center_y = (float) (height - 1) / 2;
+//
+//                float distance = std::abs(center_x - (float) x) + std::abs(center_y - (float) y);
+//                if (distance <= std::ceil((float) (width - 1 - 2 * width_bound) / 2)) {
+//                    field[y * width + x].set_state(dist(mt));
+//                    //field[y * width + x].set_state(0);
+//                    //add romb state
+//                    Coord coord(x - width_bound, y - height_bound);
+//                    field[y * width + x].set_coord(coord);
+//                    available_points[i] = field[y * width + x];
+//                    i++;
+//                } else {
+//                    field[y * width + x].set_state(0);
+//                    Coord coord(-1, -1);
+//                    field[y * width + x].set_coord(coord);
+//                }
+
+                //Todo: add exception when height != width
+                //square
                 field[y * width + x].set_state(dist(mt));
-                //field[y * width + x].set_state(0);
-                //add romb state
+                field[y * width + x].set_state(0);
+//                add romb state
                 Coord coord(x - width_bound, y - height_bound);
                 field[y * width + x].set_coord(coord);
+                available_points[i] = field[y * width + x];
+                i++;
             } else {
                 field[y * width + x].set_state(0);
                 Coord coord(-1, -1);
@@ -64,7 +110,8 @@ std::ostream &operator<<(std::ostream &out, const Field &_field) {
                 out << std::setw(3) << y;
                 continue;
             } else if (x < _field.width_bound || y < _field.height_bound
-                       || x >= _field.width - _field.width_bound || y >= _field.height - _field.height_bound) {
+                       || x >= _field.width - _field.width_bound || y >= _field.height - _field.height_bound ||
+                       _field.field[y * _field.width + x].get_coord().get_x() == -1) {
                 out << std::setw(3) << "#";
             } else {
                 out << std::setw(3) << _field.field[y * _field.width + x].get_state();
@@ -72,7 +119,7 @@ std::ostream &operator<<(std::ostream &out, const Field &_field) {
         }
         out << std::endl;
     }
-  //  out << "Hits :" << std::endl;
+    //  out << "Hits :" << std::endl;
     //write hits TODO for debug
 //    for (int y = -1; y < _field.height; ++y) {
 //        for (int x = -1; x < _field.width; ++x) {

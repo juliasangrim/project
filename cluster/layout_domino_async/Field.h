@@ -19,12 +19,13 @@ private:
 
 
 public:
-    void init_field(std::mt19937 mt);
+    void init_field();
     Field(int rows, int columns);
 
     ~Field();
 
     Cell *get_field();
+
     Cell *get_available_field();
 
     //TODO
@@ -32,17 +33,15 @@ public:
     int get_height_bound() const;
     int get_width();
     int get_height();
-    Cell get_cell_by_index(int index);
     Cell get_cell_by_coord(Coord coord);
-    Cell get_cell_by_xy(int x, int y);
     int get_size_available_field();
+    Cell get_cell_by_xy(int x, int y);
     void change_cell_status_by_coord(Coord coord, int status);
     void change_cell_hits_by_coord(Coord coord, int hits);
     //smth do
 
     friend std::ostream& operator<< (std::ostream &out, const Field & _field);
 
-    void copy_filed(Cell *new_field);
 };
 
 
