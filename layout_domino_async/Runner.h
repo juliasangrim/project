@@ -9,7 +9,7 @@
 #include <random>
 #include "Field.h"
 #include "Template.h"
-//#include "MyLoggerFile.h"
+
 //#include "FileWriter.h"
 
 class Runner {
@@ -24,7 +24,7 @@ private:
     Cell *window;
 
     std::mt19937 mt;
-    //TODO array?
+
     double probability;
     double probability_max;
     std::string file_name;

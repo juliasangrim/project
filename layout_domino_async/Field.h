@@ -31,6 +31,7 @@ public:
     //TODO
     int get_width_bound() const;
     int get_height_bound() const;
+
     int get_width();
     int get_height();
     Cell get_cell_by_coord(Coord coord);
@@ -38,7 +39,6 @@ public:
     Cell get_cell_by_xy(int x, int y);
     void change_cell_status_by_coord(Coord coord, int status);
     void change_cell_hits_by_coord(Coord coord, int hits);
-    //smth do
 
     friend std::ostream& operator<< (std::ostream &out, const Field & _field);
 

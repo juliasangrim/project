@@ -6,7 +6,7 @@
 
 Field::Field(int rows, int columns) {
     field = new Cell[(rows + 2 * height_bound) * (columns + 2 * width_bound)];
-    //Todo: is id dimond or not
+    //Todo: is it diamond or not
     //diamond
 //    if (width % 2 == 0) {
 //        size_available_field = ((rows + 1) * (columns + 1)) / 2;
@@ -49,7 +49,7 @@ void Field::init_field(std::mt19937 mt) {
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             //array creates with size + bounds
-            //Todo: is id dimond or not
+            //Todo: is it diamond or not
             //diamond
             if (x >= width_bound && x < width - width_bound && y >= height_bound && y < height - height_bound) {
 //                float center_x = (float) (width - 1) / 2;
@@ -70,7 +70,7 @@ void Field::init_field(std::mt19937 mt) {
 //                    field[y * width + x].set_coord(coord);
 //                }
 
-                //Todo: add exception when height != width
+
                 //square
                 field[y * width + x].set_state(dist(mt));
                 field[y * width + x].set_state(0);
@@ -119,26 +119,7 @@ std::ostream &operator<<(std::ostream &out, const Field &_field) {
         }
         out << std::endl;
     }
-    //  out << "Hits :" << std::endl;
-    //write hits TODO for debug
-//    for (int y = -1; y < _field.height; ++y) {
-//        for (int x = -1; x < _field.width; ++x) {
-//            if (y == -1 && x >= 0) {
-//                out << std::setw(3) << x;
-//                continue;
-//            }
-//            if (x == -1 && y >= 0) {
-//                out << std::setw(3) << y;
-//                continue;
-//            } else if (x < _field.width_bound || y < _field.height_bound
-//                       || x >= _field.width - _field.width_bound || y >= _field.height - _field.height_bound) {
-//                out << std::setw(3) << "#";
-//            } else {
-//                out << std::setw(3) << _field.field[y * _field.width + x].get_hits();
-//            }
-//        }
-//        out << std::endl;
-//    }
+
     return out;
 }
 

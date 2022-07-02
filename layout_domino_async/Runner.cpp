@@ -20,13 +20,12 @@ Runner::Runner(std::string &file, int height, int width, double prob_0, double p
 }
 
 void Runner::init_templates() {
-//    LoggingLib::FileLogger template_logger("log_file_template.txt");
-//    template_logger << "INIT TEMPLATES: \n";
+
     for (int y = 0; y < HEIGHT; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
             Coord center(x, y);
             templates[y * WIDTH + x].init_template(center);
-//            template_logger << templates[y * WIDTH + x];
+
         }
     }
 }
@@ -43,22 +42,20 @@ void Runner::fill_window(Coord center) {
 
 
 void Runner::evolve() {
-   // LoggingLib::FileLogger field_logger("log_file.txt");
+
     int all_point_number = field->get_size_available_field();
     std::uniform_int_distribution<int> dist1(0, all_point_number - 1);
     //get number of points
     int max_count = 0;
     int iter_num = 0;
     for (int i = 0; i < iter_count; ++i) {
-       // field_logger << "----NUMBER OF ITERATION: " << i << "\n";
+
         for (int j = 0; j < all_point_number; ++j) {
-         //   field_logger << "STATE OF FIELD BEFORE COUNT HITS: \n" << *field;
+
             int rand_index = dist1(mt);
-            //std::cout << rand_index << std::endl;
             //Todo: make coordinate shift inside field
             Coord center = field->get_available_field()[rand_index].get_coord();
             center.set_coord(center.get_x() + field->get_width_bound(), center.get_y() + field->get_height_bound());
-          //  std::cout << center << std::endl;
             fill_window(center);
 
             auto hits = count_hits();
@@ -76,17 +73,11 @@ void Runner::evolve() {
 
     this->field->init_field(mt);
     std::cout << iter_num << "; " << max_count << std::endl;
-   // domino_info.write_file(iter_num, ";", max_count);
 }
 
 void Runner::run() {
-   // std::cout << *field << std::endl;
     std::uniform_real_distribution<double> rand_prob(0, 1);
     evolve();
-   // std::cout << checkValidDomino() << std::endl;
-//    FileWriter fileWriter = FileWriter(file_name);
-//    fileWriter.write_file(*field);
-
 }
 
 Runner::~Runner() {
