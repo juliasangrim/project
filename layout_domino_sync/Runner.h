@@ -25,7 +25,6 @@ private:
     Cell *window;
 
     std::mt19937 mt;
-    //TODO array?
     double probability;
     double probability_max;
     std::string file_name;

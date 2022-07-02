@@ -32,7 +32,6 @@ public:
     int get_height_bound() const;
     int get_width();
     int get_height();
-    Cell get_cell_by_index(int index);
     Cell get_cell_by_coord(Coord coord);
     Cell get_cell_by_xy(int x, int y);
     int get_size_available_field();

@@ -7,7 +7,7 @@
 
 Field::Field(int rows, int columns) {
     field = new Cell[(rows + 2 * height_bound) * (columns + 2 * width_bound)];
-    //Todo: is id dimond or not
+    //Todo: is id diamond or not
     //diamond
 //    if (width % 2 == 0) {
 //        size_available_field = ((rows + 1) * (columns + 1)) / 2;
@@ -49,7 +49,7 @@ void Field::init_field(std::mt19937 mt) {
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             //array creates with size + bounds
-            //Todo: is id dimond or not
+            //Todo: is id diamond or not
             //diamond
             if (x >= width_bound && x < width - width_bound && y >= height_bound && y < height - height_bound) {
 //                float center_x = (float) (width - 1) / 2;
@@ -70,7 +70,7 @@ void Field::init_field(std::mt19937 mt) {
 //                    field[y * width + x].set_coord(coord);
 //                }
 
-                //Todo: add exception when height != width
+
                 //square
                 field[y * width + x].set_state(dist(mt));
                 field[y * width + x].set_state(0);
