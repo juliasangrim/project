@@ -1,9 +1,0 @@
-#ifndef LAYOUT_DOMINO_TILETYPE_H
-#define LAYOUT_DOMINO_TILETYPE_H
-
-enum Tiletype {
-    HORIZONTAL,
-    VERTICAL
-};
-
-#endif //LAYOUT_DOMINO_TILETYPE_H
